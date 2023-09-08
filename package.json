@@ -1,0 +1,19 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "The auth-service for mern-space project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suheabkhan/mern-space-auth-service.git"
+  },
+  "author": "suheab khan tailor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suheabkhan/mern-space-auth-service/issues"
+  },
+  "homepage": "https://github.com/suheabkhan/mern-space-auth-service#readme"
+}
