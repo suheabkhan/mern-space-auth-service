@@ -1,25 +1,29 @@
 {
-  "name": "auth-service",
-  "version": "1.0.0",
-  "description": "The auth-service for mern-space project",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/suheabkhan/mern-space-auth-service.git"
-  },
-  "author": "suheab khan tailor",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/suheabkhan/mern-space-auth-service/issues"
-  },
-  "homepage": "https://github.com/suheabkhan/mern-space-auth-service#readme",
-  "devDependencies": {
-    "@types/node": "^20.5.9",
-    "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
-  }
+    "name": "auth-service",
+    "version": "1.0.0",
+    "description": "The auth-service for mern-space project",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier .",
+        "format:check": "npm run format -- --check",
+        "format:autofix": "npm run format -- --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/suheabkhan/mern-space-auth-service.git"
+    },
+    "author": "suheab khan tailor",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/suheabkhan/mern-space-auth-service/issues"
+    },
+    "homepage": "https://github.com/suheabkhan/mern-space-auth-service#readme",
+    "devDependencies": {
+        "@types/node": "^20.5.9",
+        "nodemon": "^3.0.1",
+        "prettier": "^3.0.3",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.2.2"
+    }
 }
