@@ -6,8 +6,12 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier .",
-        "format:check": "npm run format -- --check",
-        "format:autofix": "npm run format -- --write"
+        "format:check": "prettier . --check",
+        "format:fix": "prettier . --write",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "dev": "node src/server.js",
+        "start": "nodemon src/server.ts"
     },
     "repository": {
         "type": "git",
@@ -21,6 +25,10 @@
     "homepage": "https://github.com/suheabkhan/mern-space-auth-service#readme",
     "devDependencies": {
         "@types/node": "^20.5.9",
+        "@typescript-eslint/eslint-plugin": "^6.7.0",
+        "@typescript-eslint/parser": "^6.7.0",
+        "eslint": "^8.49.0",
+        "eslint-config-prettier": "^9.0.0",
         "nodemon": "^3.0.1",
         "prettier": "^3.0.3",
         "ts-node": "^10.9.1",
