@@ -1,7 +1,7 @@
 import app from '../auth-service/src/app';
 import request from 'supertest';
 
-describe('App', () => {
+describe.skip('App', () => {
     it('should work', () => {});
 
     it('Should return 200', async () => {

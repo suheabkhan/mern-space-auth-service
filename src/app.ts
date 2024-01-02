@@ -5,6 +5,8 @@ import createError from 'http-errors';
 import router from './routes/auth';
 import 'reflect-metadata';
 const app = express();
+
+app.use(express.json());
 const authRoutes = router;
 app.get('/', (req: Request, res: Response) => {
     res.send('welcome to auth service');

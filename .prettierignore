@@ -2,3 +2,6 @@
 #ignore artifacts
 build
 coverage
+package.json
+package-lock.json
+tsconfig.json
