@@ -2,8 +2,10 @@ import express, { NextFunction, Request, Response } from 'express';
 import logger from './config/logger';
 import { HttpError } from 'http-errors';
 import createError from 'http-errors';
+import router from './routes/auth';
+import 'reflect-metadata';
 const app = express();
-
+const authRoutes = router;
 app.get('/', (req: Request, res: Response) => {
     res.send('welcome to auth service');
 });
@@ -19,6 +21,8 @@ app.get('/error', async (req: Request, res: Response, next: NextFunction) => {
 app.get('/test', (req: Request, res: Response) => {
     res.status(200).send('welcome to auth service');
 });
+
+app.use('/auth', authRoutes);
 /*-- as there is no use of next function, but without using it,
 our middleware doesnot work.. as the global error handler always takes 4 parameters
 */
