@@ -3,8 +3,8 @@ import request from 'supertest';
 import app from '../../src/app';
 import { DataSource } from 'typeorm';
 import { AppDataSource } from '../../src/config/data-source';
-import { truncateTables } from '../utils';
 import { User } from '../../src/entity/User';
+import { Roles } from '../../src/constants/index';
 
 describe('POST /auth/register', () => {
     let connection: DataSource;
@@ -15,7 +15,9 @@ describe('POST /auth/register', () => {
 
     beforeEach(async () => {
         // truncate database
-        await truncateTables(connection);
+        await connection.dropDatabase();
+        await connection.synchronize();
+        //rebuild the database, as we need to synchroize the db if a new column is added/removed
     });
 
     afterAll(async () => {
@@ -75,6 +77,22 @@ describe('POST /auth/register', () => {
             expect(users[0].firstName).toEqual(userData.firstName);
             expect(users[0].lastName).toEqual(userData.lastName);
             expect(users[0].email).toEqual(userData.email);
+        });
+
+        it('should assign a customer role', async () => {
+            const userData = {
+                firstName: 'suheab',
+                lastName: 'khan',
+                email: 'suheab@mern.space',
+                password: 'password',
+            };
+            // Act
+            await request(app).post('/auth/register').send(userData);
+            //Assert
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users[0]).toHaveProperty('role');
+            expect(users[0].role).toBe(Roles.CUSTOMER);
         });
     });
 
