@@ -94,6 +94,27 @@ describe('POST /auth/register', () => {
             expect(users[0]).toHaveProperty('role');
             expect(users[0].role).toBe(Roles.CUSTOMER);
         });
+
+        it('should store the hashed password in db', async () => {
+            const userData = {
+                firstName: 'suheab',
+                lastName: 'khan',
+                email: 'suheab@mern.space',
+                password: 'password',
+            };
+            // Act
+            await request(app).post('/auth/register').send(userData);
+            //Assert
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            //check if the currentpassword is not same as hashed password
+            expect(users[0].password).not.toBe(userData.password);
+            //according to docs, length will be 60
+            expect(users[0].password).toHaveLength(60);
+            //according to docs, the password will have the following pattern
+            expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
+            //check if the hashedpassword stored is correct
+        });
     });
 
     describe('Fields are missing', () => {});
