@@ -115,6 +115,26 @@ describe('POST /auth/register', () => {
             expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
             //check if the hashedpassword stored is correct
         });
+
+        it('should return 400 status if the email is not unique', async () => {
+            //Arrange
+            const userData = {
+                firstName: 'suheab',
+                lastName: 'khan',
+                email: 'suheab@mern.space',
+                password: 'password',
+            };
+            const userRepository = connection.getRepository(User);
+            await userRepository.save({ ...userData, role: Roles.CUSTOMER });
+            // Act
+            const response = await request(app)
+                .post('/auth/register')
+                .send(userData);
+            const users = await userRepository.find();
+            //Assert
+            expect(response.statusCode).toBe(400);
+            expect(users).toHaveLength(1);
+        });
     });
 
     describe('Fields are missing', () => {});
