@@ -6,3 +6,4 @@ build
 .env.prod
 .env.test
 logs
+certs
