@@ -107,5 +107,10 @@ describe('POST /auth/self', () => {
                 'password',
             );
         });
+
+        it('should return the status code as 401 if token not provided', async () => {
+            const response = await request(app).get('/auth/self').send();
+            expect(response.statusCode).toBe(401);
+        });
     });
 });

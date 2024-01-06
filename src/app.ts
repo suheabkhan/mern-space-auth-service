@@ -9,6 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('public'));
 const authRoutes = router;
 app.get('/', (req: Request, res: Response) => {
     res.send('welcome to auth service');
@@ -33,8 +34,11 @@ our middleware doesnot work.. as the global error handler always takes 4 paramet
 
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-    logger.error('global error handler::' + err.message);
-    const statusCode = err.statusCode || 500;
+    const statusCode = err.statusCode || err.status || 500;
+    logger.error('global error handler:: {}', {
+        message: err.message,
+        statusCode,
+    });
     res.status(statusCode).json({
         errors: [
             {
