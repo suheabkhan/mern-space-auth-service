@@ -6,11 +6,14 @@ import { validationResult } from 'express-validator';
 import { JwtPayload } from 'jsonwebtoken';
 import { Roles } from '../constants';
 import { TokenService } from '../services/TokenService';
+import createHttpError from 'http-errors';
+import { CredentialService } from '@/services/CredentialService';
 export class AuthController {
     constructor(
         private userService: UserService,
         private logger: Logger,
         private tokenService: TokenService,
+        private credentialService: CredentialService,
     ) {}
 
     async register(
@@ -68,6 +71,73 @@ export class AuthController {
                 httpOnly: true,
             });
             res.status(201).json({ id: user.id });
+        } catch (err) {
+            return next(err);
+        }
+    }
+
+    async login(req: RegisterUserRequest, res: Response, next: NextFunction) {
+        //validate the email field
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            //This error format is to maintain the consistency between the GEH
+            return res.status(400).json({ errors: result.array() });
+        }
+        const { email, password } = req.body;
+        this.logger.debug('New request has received for user login', {
+            email,
+            password: '******',
+        });
+        try {
+            const user = await this.userService.findByEmail(email);
+            if (!user) {
+                const emailDoesNotExist = createHttpError(
+                    400,
+                    'Email or Password Does not match',
+                );
+                return next(emailDoesNotExist);
+            }
+
+            const passwordMatch = await this.credentialService.checkPassword(
+                password,
+                user.password,
+            );
+            if (!passwordMatch) {
+                const emailDoesNotExist = createHttpError(
+                    400,
+                    'Email or Password Does not match',
+                );
+                return next(emailDoesNotExist);
+            }
+
+            const payload: JwtPayload = {
+                sub: String(user.id),
+                role: Roles.CUSTOMER,
+            };
+
+            const accessToken = this.tokenService.generateAccessToken(payload);
+
+            // Persist the refresh token
+            const newRefreshToken =
+                await this.tokenService.persistRefreshToken(user);
+
+            const refreshToken = this.tokenService.generateRefreshToken({
+                ...payload,
+                id: String(newRefreshToken.id),
+            });
+            res.cookie('accessToken', accessToken, {
+                domain: 'localhost',
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 1000, //1 day
+                httpOnly: true,
+            });
+            res.cookie('refreshToken', refreshToken, {
+                domain: 'localhost',
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
+                httpOnly: true,
+            });
+            res.status(200).json({ id: user.id });
         } catch (err) {
             return next(err);
         }

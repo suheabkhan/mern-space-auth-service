@@ -1,10 +1,13 @@
 import app from './app';
+import { AppDataSource } from './config/data-source';
 import { Config } from './config/index';
 import logger from './config/logger';
 
-const startServer = () => {
+const startServer = async () => {
     try {
         const PORT = Config.PORT;
+        await AppDataSource.initialize();
+        logger.info('Database connected..');
         app.listen(PORT, () => {
             logger.info(`Listening on port ${PORT}`);
         });
@@ -18,4 +21,4 @@ const startServer = () => {
     }
 };
 
-startServer();
+void startServer();
