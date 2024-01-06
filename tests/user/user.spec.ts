@@ -74,5 +74,38 @@ describe('POST /auth/self', () => {
             //assert whether the user id matches that of the user registered
             expect((response.body as Record<string, string>).id).toBe(1);
         });
+
+        it('should not return the password in the user data', async () => {
+            //first register the data to validate the data
+            // Arrange
+            const userData = {
+                firstName: 'suheab',
+                lastName: 'khan',
+                email: 'suheab@mern.space',
+                password: 'password',
+            };
+            // Act
+            const userRepository = connection.getRepository(User);
+            const data = await userRepository.save({
+                ...userData,
+                role: Roles.CUSTOMER,
+            });
+            //Generate token --> for this we will use mock-jws library for testing (will use 1.0.10)
+            //could have done register API calling, that would have automatically given the token, but to
+            //isolate the things, we are using the mock-jwks library
+            const accessToken = jwks.token({
+                sub: String(data.id),
+                role: data.role,
+            });
+            //since, we are testing manually, need to add the cookie manually here
+            const response = await request(app)
+                .get('/auth/self')
+                .set('Cookie', [`accessToken=${accessToken};`])
+                .send();
+            //assert whether the user id matches that of the user registered
+            expect(response.body as Record<string, string>).not.toHaveProperty(
+                'password',
+            );
+        });
     });
 });

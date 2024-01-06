@@ -147,6 +147,6 @@ export class AuthController {
         //middleware injects a property called as auth inside request , by decoding all parameters
         //so create a type of what is encoded while creating jwt
         const user = await this.userService.findById(Number(req.auth.sub));
-        res.json(user);
+        res.json({ ...user, password: undefined });
     }
 }
