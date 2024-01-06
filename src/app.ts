@@ -3,10 +3,12 @@ import logger from './config/logger';
 import { HttpError } from 'http-errors';
 import createError from 'http-errors';
 import router from './routes/auth';
+import cookieParser from 'cookie-parser';
 import 'reflect-metadata';
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 const authRoutes = router;
 app.get('/', (req: Request, res: Response) => {
     res.send('welcome to auth service');

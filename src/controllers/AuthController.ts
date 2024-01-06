@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { RegisterUserRequest } from '../types/index';
+import { AuthRequest, RegisterUserRequest } from '../types/index';
 import { UserService } from '../services/UserService';
 import { Logger } from 'winston';
 import { validationResult } from 'express-validator';
@@ -141,5 +141,12 @@ export class AuthController {
         } catch (err) {
             return next(err);
         }
+    }
+
+    async self(req: AuthRequest, res: Response) {
+        //middleware injects a property called as auth inside request , by decoding all parameters
+        //so create a type of what is encoded while creating jwt
+        const user = await this.userService.findById(Number(req.auth.sub));
+        res.json(user);
     }
 }
