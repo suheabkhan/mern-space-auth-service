@@ -20,5 +20,11 @@ export interface AuthRequest extends Request {
     auth: {
         sub: string;
         role: number;
+        id: string;
     };
+}
+
+export interface AuthCookie {
+    accessToken: string;
+    refreshToken: string;
 }

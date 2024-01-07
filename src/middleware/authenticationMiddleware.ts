@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { Config } from '../config/index';
 import { GetVerificationKey, expressjwt } from 'express-jwt';
 import jwksClient from 'jwks-rsa';
+import { AuthCookie } from '../types/index';
 //since we are using rsa algorithm to create accessToken, we use jwks-rsa library to read the public secretkey
 
 export default expressjwt({
@@ -24,10 +25,7 @@ export default expressjwt({
             }
         }
         //if not found in auth headers, check in cookies
-        type Token = {
-            accessToken: string;
-        };
-        const { accessToken } = req.cookies as Token;
+        const { accessToken } = req.cookies as AuthCookie;
 
         return accessToken;
     },

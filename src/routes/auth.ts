@@ -11,6 +11,7 @@ import loginValidator from '../validators/login-validator';
 import { CredentialService } from '../services/CredentialService';
 import authenticationMiddleware from '../middleware/authenticationMiddleware';
 import { AuthRequest } from '../types/index';
+import validateRefreshTokenMiddleware from '../middleware/validateRefreshTokenMiddleware';
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
@@ -45,6 +46,14 @@ router.get(
     authenticationMiddleware,
     async (req: Request, res: Response) => {
         await authController.self(req as AuthRequest, res);
+    },
+);
+
+router.post(
+    '/refresh',
+    validateRefreshTokenMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+        await authController.refresh(req as AuthRequest, res, next);
     },
 );
 
