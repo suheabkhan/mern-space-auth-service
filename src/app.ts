@@ -3,6 +3,7 @@ import logger from './config/logger';
 import { HttpError } from 'http-errors';
 import createError from 'http-errors';
 import router from './routes/auth';
+import tenantRouter from './routes/tenant';
 import cookieParser from 'cookie-parser';
 import 'reflect-metadata';
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 const authRoutes = router;
+const tenantRoutes = tenantRouter;
 app.get('/', (req: Request, res: Response) => {
     res.send('welcome to auth service');
 });
@@ -28,6 +30,7 @@ app.get('/test', (req: Request, res: Response) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/tenants', tenantRoutes);
 /*-- as there is no use of next function, but without using it,
 our middleware doesnot work.. as the global error handler always takes 4 parameters
 */

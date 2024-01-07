@@ -28,3 +28,12 @@ export interface AuthCookie {
     accessToken: string;
     refreshToken: string;
 }
+
+export interface ITenant {
+    name: string;
+    address: string;
+}
+
+export interface createTenantRequest extends Request {
+    body: ITenant;
+}
