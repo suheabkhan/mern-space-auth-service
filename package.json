@@ -4,7 +4,7 @@
     "description": "The auth-service for mern-space project",
     "main": "index.js",
     "scripts": {
-        "test": "jest --watch --runInBand",
+        "test": "jest --no-cache --coverage --all --runInBand",
         "format": "prettier .",
         "format:check": "prettier . --check",
         "format:fix": "prettier . --write",
@@ -16,7 +16,9 @@
         "start": "ts-node src/index.ts",
         "migration:generate": "typeorm-ts-node-commonjs migration:generate",
         "migration:run":"typeorm-ts-node-commonjs migration:run",
-        "migration:create":"typeorm-ts-node-commonjs migration:create"
+        "migration:create":"typeorm-ts-node-commonjs migration:create",
+        "test:watch":"jest --watch --runInBand"
+
     },
     "repository": {
         "type": "git",
