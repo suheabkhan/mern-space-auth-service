@@ -19,15 +19,29 @@ npm run migration:run -- -d src/config/data-source.ts
 
 // Run this command to dockerize the express application
 
+// https://codersgyan.notion.site/Containerisation-Express-app-ecd8f3c5acf446629acdc67cff4ca55f
+
 docker run --rm -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules --env-file ${PWD}/.env -p 5501:5501 -e NODE_ENV=development auth-service
 
 // Run this command to dockerize the postgress application and let our express application use this 
 
+// https://codersgyan.notion.site/Setting-up-PostgreSQL-in-a-Docker-Container-with-Persistent-Volume-58711388eb244c9fa1597d87783e3f92
+
 docker run --rm --name mernpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v mernpgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres
 
+//build docker image after writing Dockerfile
+//Here mernstack_test_prod_image  is the name of the image
+docker build -t mernstack_test_prod_image -f .\docker\prod\Dockerfile .
 
 //Build application
 
 npm run build
 
 //run the compiled js 
+
+cd dist
+
+node src/server.js
+
+//password supabase
+mernspace@123
