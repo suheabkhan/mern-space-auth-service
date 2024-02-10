@@ -23,7 +23,6 @@ app.get('/error', async (req: Request, res: Response, next: NextFunction) => {
     //Here basically, async errors are not caught by the GEH(global error handler), so to catch them
     // we need the next paramter, to return the error
     return next(error);
-    res.send('welcome to auth service');
 });
 // This is an API test
 app.get('/test', (req: Request, res: Response) => {
