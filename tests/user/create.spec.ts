@@ -105,6 +105,9 @@ describe('POST /users', () => {
                 sub: '1',
                 role: Roles.MANAGER,
             });
+            const tenant: Tenant = await createTenant(
+                connection.getRepository(Tenant),
+            );
 
             // Register user
             const userData = {
@@ -112,7 +115,7 @@ describe('POST /users', () => {
                 lastName: 'K',
                 email: 'rakesh@mern.space',
                 password: 'password',
-                tenantId: 1,
+                tenantId: tenant.id,
             };
 
             // Add token to cookie

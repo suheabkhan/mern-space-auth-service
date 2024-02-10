@@ -12,6 +12,12 @@ export class UserController {
     ) {}
 
     async create(req: createUserRequest, res: Response, next: NextFunction) {
+        // Validation
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
+
         try {
             const { firstName, lastName, email, password, role, tenantId } =
                 req.body;

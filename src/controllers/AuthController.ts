@@ -7,7 +7,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import { Roles } from '../constants';
 import { TokenService } from '../services/TokenService';
 import createHttpError from 'http-errors';
-import { CredentialService } from '@/services/CredentialService';
+import { CredentialService } from '../services/CredentialService';
 export class AuthController {
     constructor(
         private userService: UserService,

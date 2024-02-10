@@ -11,6 +11,7 @@
         "lint:check": "eslint .",
         "lint:fix": "eslint . --fix",
         "dev": "cross-env NODE_ENV=dev nodemon src/server.ts --legacy-watch",
+        "build":"tsc",
         "prepare": "husky install",
         "start": "ts-node src/index.ts",
         "migration:generate": "typeorm-ts-node-commonjs migration:generate",
