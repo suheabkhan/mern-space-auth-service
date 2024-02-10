@@ -4,6 +4,7 @@ import { HttpError } from 'http-errors';
 import createError from 'http-errors';
 import router from './routes/auth';
 import tenantRouter from './routes/tenant';
+import userRouter from './routes/user';
 import cookieParser from 'cookie-parser';
 import 'reflect-metadata';
 const app = express();
@@ -31,6 +32,7 @@ app.get('/test', (req: Request, res: Response) => {
 
 app.use('/auth', authRoutes);
 app.use('/tenants', tenantRoutes);
+app.use('/users', userRouter);
 /*-- as there is no use of next function, but without using it,
 our middleware doesnot work.. as the global error handler always takes 4 parameters
 */

@@ -1,0 +1,26 @@
+//Migration commands
+
+// generate the migration file, basically auto generates the migration file with all the sql queries depending on your changes to the entities
+// Here RenameTable is the fileName to be generated inside the migrations folder
+
+npm run migration:create -- src/migration/RenameTable
+
+// generate the migration file, basically auto generates the migration file with all the sql queries depending on your changes to the entities
+// Here RenameTable is the fileName to be generated inside the migrations folder
+
+npm run migration:generate -- src/migration/RenameTable -d src/config/data-source.ts
+
+// Run the migration file, basically runs all the migration scripts inside the migration file (which are either created or generated)
+
+npm run migration:run -- -d src/config/data-source.ts
+
+
+// start the application using docker commands
+
+// Run this command to dockerize the express application
+
+docker run --rm -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules --env-file ${PWD}/.env -p 5501:5501 -e NODE_ENV=development auth-service
+
+// Run this command to dockerize the postgress application and let our express application use this 
+
+docker run --rm --name mernpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v mernpgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres

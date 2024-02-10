@@ -108,7 +108,7 @@ describe('POST /auth/register', () => {
             await request(app).post('/auth/register').send(userData);
             //Assert
             const userRepository = connection.getRepository(User);
-            const users = await userRepository.find();
+            const users = await userRepository.find({ select: ['password'] });
             //check if the currentpassword is not same as hashed password
             expect(users[0].password).not.toBe(userData.password);
             //according to docs, length will be 60

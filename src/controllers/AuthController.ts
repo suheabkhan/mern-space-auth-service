@@ -40,6 +40,7 @@ export class AuthController {
                 lastName,
                 email,
                 password,
+                role: Roles.CUSTOMER,
             });
             this.logger.info('User is registered with id ' + user.id);
 
@@ -89,7 +90,7 @@ export class AuthController {
             password: '******',
         });
         try {
-            const user = await this.userService.findByEmail(email);
+            const user = await this.userService.findByEmailWithPassword(email);
             if (!user) {
                 const emailDoesNotExist = createHttpError(
                     400,
