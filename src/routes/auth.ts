@@ -1,6 +1,11 @@
 import { UserService } from '../services/UserService';
 import { AuthController } from '../controllers/AuthController';
-import express, { NextFunction, Request, Response } from 'express';
+import express, {
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from 'express';
 import { User } from '../entity/User';
 import { AppDataSource } from '../config/data-source';
 import logger from '../config/logger';
@@ -26,45 +31,48 @@ const authController = new AuthController(
     credentialService,
 );
 
-router.post(
-    '/register',
-    registerValidator,
-    async (req: Request, res: Response, next: NextFunction) => {
-        await authController.register(req, res, next);
-    },
-);
+router.post('/register', registerValidator, (async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    await authController.register(req, res, next);
+}) as RequestHandler);
 
-router.post(
-    '/login',
-    loginValidator,
-    async (req: Request, res: Response, next: NextFunction) => {
-        await authController.login(req, res, next);
-    },
-);
+router.post('/login', loginValidator, (async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    await authController.login(req, res, next);
+}) as RequestHandler);
 
 router.get(
     '/self',
-    authenticationMiddleware,
-    async (req: Request, res: Response) => {
-        await authController.self(req as AuthRequest, res);
+    authenticationMiddleware as RequestHandler,
+    (req: Request, res: Response) => {
+        authController.self(
+            req as AuthRequest,
+            res,
+        ) as unknown as RequestHandler;
     },
 );
 
 router.post(
     '/refresh',
-    validateRefreshTokenMiddleware,
-    async (req: Request, res: Response, next: NextFunction) => {
+    validateRefreshTokenMiddleware as RequestHandler,
+    (async (req: Request, res: Response, next: NextFunction) => {
         await authController.refresh(req as AuthRequest, res, next);
-    },
+    }) as RequestHandler,
 );
 
 router.post(
     '/logout',
-    authenticationMiddleware,
-    parseRefreshToken,
-    async (req: Request, res: Response, next: NextFunction) => {
+    authenticationMiddleware as RequestHandler,
+    parseRefreshToken as RequestHandler,
+    (async (req: Request, res: Response, next: NextFunction) => {
         await authController.logout(req as AuthRequest, res, next);
-    },
+    }) as RequestHandler,
 );
 
 export default router;
