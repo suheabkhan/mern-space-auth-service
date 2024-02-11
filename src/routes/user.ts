@@ -26,7 +26,11 @@ router.post(
     canAccess([Roles.ADMIN]),
     createUserValidator,
     (req: Request, res: Response, next: NextFunction) =>
-        userController.create(req as createUserRequest, res, next),
+        userController.create(
+            req as createUserRequest,
+            res,
+            next,
+        ) as unknown as RequestHandler,
 );
 router.patch(
     '/:id',
@@ -34,28 +38,31 @@ router.patch(
     canAccess([Roles.ADMIN]),
     updateUserValidator,
     (req: UpdateUserRequest, res: Response, next: NextFunction) =>
-        userController.update(req, res, next),
+        userController.update(req, res, next) as unknown as RequestHandler,
 );
 
 router.get(
     '/',
     authenticationMiddleware as RequestHandler,
     canAccess([Roles.ADMIN]),
-    (req, res, next) => userController.getAll(req, res, next),
+    (req, res, next) =>
+        userController.getAll(req, res, next) as unknown as RequestHandler,
 );
 
 router.get(
     '/:id',
     authenticationMiddleware as RequestHandler,
     canAccess([Roles.ADMIN]),
-    (req, res, next) => userController.getOne(req, res, next),
+    (req, res, next) =>
+        userController.getOne(req, res, next) as unknown as RequestHandler,
 );
 
 router.delete(
     '/:id',
     authenticationMiddleware as RequestHandler,
     canAccess([Roles.ADMIN]),
-    (req, res, next) => userController.destroy(req, res, next),
+    (req, res, next) =>
+        userController.destroy(req, res, next) as unknown as RequestHandler,
 );
 
 export default router;

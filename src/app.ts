@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import logger from './config/logger';
-import { HttpError } from 'http-errors';
-import createError from 'http-errors';
+import createError, { HttpError } from 'http-errors';
 import router from './routes/auth';
 import tenantRouter from './routes/tenant';
 import userRouter from './routes/user';
@@ -18,7 +17,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('welcome to auth service');
 });
 //This is an GEH test
-app.get('/error', async (req: Request, res: Response, next: NextFunction) => {
+app.get('/error', (req: Request, res: Response, next: NextFunction) => {
     const error = createError(401, 'you are not allowed to access this page');
     //Here basically, async errors are not caught by the GEH(global error handler), so to catch them
     // we need the next paramter, to return the error
