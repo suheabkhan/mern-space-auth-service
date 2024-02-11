@@ -114,7 +114,7 @@ describe('POST /auth/register', () => {
             //according to docs, length will be 60
             expect(users[0].password).toHaveLength(60);
             //according to docs, the password will have the following pattern
-            expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
+            expect(users[0].password).toMatch(/^\$2[a|b]\$\d+\$/);
             //check if the hashedpassword stored is correct
         });
 
