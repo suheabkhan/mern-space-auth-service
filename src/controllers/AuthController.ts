@@ -61,15 +61,17 @@ export class AuthController {
             });
             res.cookie('accessToken', accessToken, {
                 domain: 'localhost',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000, //1 day
                 httpOnly: true,
+                secure: true,
             });
             res.cookie('refreshToken', refreshToken, {
                 domain: 'localhost',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
                 httpOnly: true,
+                secure: true,
             });
             res.status(201).json({ id: user.id });
         } catch (err) {
@@ -128,15 +130,17 @@ export class AuthController {
             });
             res.cookie('accessToken', accessToken, {
                 domain: 'localhost',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000, //1 day
                 httpOnly: true,
+                secure: true,
             });
             res.cookie('refreshToken', refreshToken, {
                 domain: 'localhost',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
                 httpOnly: true,
+                secure: true,
             });
             res.status(200).json({ id: user.id });
         } catch (err) {
@@ -183,16 +187,18 @@ export class AuthController {
 
             res.cookie('accessToken', accessToken, {
                 domain: 'localhost',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 1000 * 60 * 60, // 1h
                 httpOnly: true, // Very important
+                secure: true,
             });
 
             res.cookie('refreshToken', refreshToken, {
                 domain: 'localhost',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
                 httpOnly: true, // Very important
+                secure: true,
             });
 
             this.logger.info('User has been logged in', { id: user.id });
