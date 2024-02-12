@@ -6,8 +6,15 @@ import tenantRouter from './routes/tenant';
 import userRouter from './routes/user';
 import cookieParser from 'cookie-parser';
 import 'reflect-metadata';
+import cors from 'cors';
 const app = express();
-
+app.use(
+    cors({
+        origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+        credentials: true,
+        methods: 'GET,POST,PUT,PATCH,DELETE',
+    }),
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
