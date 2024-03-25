@@ -8,6 +8,7 @@ import { Roles } from '../constants';
 import { TokenService } from '../services/TokenService';
 import createHttpError from 'http-errors';
 import { CredentialService } from '../services/CredentialService';
+import { User } from '../entity/User';
 export class AuthController {
     constructor(
         private userService: UserService,
@@ -44,39 +45,72 @@ export class AuthController {
             });
             this.logger.info('User is registered with id ' + user.id);
 
-            const payload: JwtPayload = {
-                sub: String(user.id),
-                role: Roles.CUSTOMER,
-            };
+            // const payload: JwtPayload = {
+            //     sub: String(user.id),
+            //     role: Roles.CUSTOMER,
+            // };
 
-            const accessToken = this.tokenService.generateAccessToken(payload);
+            // const accessToken = this.tokenService.generateAccessToken(payload);
 
-            // Persist the refresh token
-            const newRefreshToken =
-                await this.tokenService.persistRefreshToken(user);
+            // // Persist the refresh token
+            // const newRefreshToken =
+            //     await this.tokenService.persistRefreshToken(user);
 
-            const refreshToken = this.tokenService.generateRefreshToken({
-                ...payload,
-                id: String(newRefreshToken.id),
-            });
-            res.cookie('accessToken', accessToken, {
-                domain: 'localhost',
-                sameSite: 'none',
-                maxAge: 60 * 60 * 1000, //1 day
-                httpOnly: true,
-                secure: true,
-            });
-            res.cookie('refreshToken', refreshToken, {
-                domain: 'localhost',
-                sameSite: 'none',
-                maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
-                httpOnly: true,
-                secure: true,
-            });
+            // const refreshToken = this.tokenService.generateRefreshToken({
+            //     ...payload,
+            //     id: String(newRefreshToken.id),
+            // });
+            // res.cookie('accessToken', accessToken, {
+            //     domain: 'localhost',
+            //     sameSite: 'none',
+            //     maxAge: 60 * 60 * 1000, //1 day
+            //     httpOnly: true,
+            //     secure: true,
+            // });
+            // res.cookie('refreshToken', refreshToken, {
+            //     domain: 'localhost',
+            //     sameSite: 'none',
+            //     maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
+            //     httpOnly: true,
+            //     secure: true,
+            // });
+            await this.setCookies(res, user);
             res.status(201).json({ id: user.id });
         } catch (err) {
             return next(err);
         }
+    }
+
+    async setCookies(res: Response, user: User) {
+        const payload: JwtPayload = {
+            sub: String(user.id),
+            role: Roles.CUSTOMER,
+        };
+
+        const accessToken = this.tokenService.generateAccessToken(payload);
+
+        // Persist the refresh token
+        const newRefreshToken =
+            await this.tokenService.persistRefreshToken(user);
+
+        const refreshToken = this.tokenService.generateRefreshToken({
+            ...payload,
+            id: String(newRefreshToken.id),
+        });
+        res.cookie('accessToken', accessToken, {
+            domain: 'localhost',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000, //1 day
+            httpOnly: true,
+            secure: true,
+        });
+        res.cookie('refreshToken', refreshToken, {
+            domain: 'localhost',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
+            httpOnly: true,
+            secure: true,
+        });
     }
 
     async login(req: RegisterUserRequest, res: Response, next: NextFunction) {
@@ -113,35 +147,36 @@ export class AuthController {
                 return next(emailDoesNotExist);
             }
 
-            const payload: JwtPayload = {
-                sub: String(user.id),
-                role: Roles.CUSTOMER,
-            };
+            // const payload: JwtPayload = {
+            //     sub: String(user.id),
+            //     role: Roles.CUSTOMER,
+            // };
 
-            const accessToken = this.tokenService.generateAccessToken(payload);
+            // const accessToken = this.tokenService.generateAccessToken(payload);
 
-            // Persist the refresh token
-            const newRefreshToken =
-                await this.tokenService.persistRefreshToken(user);
+            // // Persist the refresh token
+            // const newRefreshToken =
+            //     await this.tokenService.persistRefreshToken(user);
 
-            const refreshToken = this.tokenService.generateRefreshToken({
-                ...payload,
-                id: String(newRefreshToken.id),
-            });
-            res.cookie('accessToken', accessToken, {
-                domain: 'localhost',
-                sameSite: 'none',
-                maxAge: 60 * 60 * 1000, //1 day
-                httpOnly: true,
-                secure: true,
-            });
-            res.cookie('refreshToken', refreshToken, {
-                domain: 'localhost',
-                sameSite: 'none',
-                maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
-                httpOnly: true,
-                secure: true,
-            });
+            // const refreshToken = this.tokenService.generateRefreshToken({
+            //     ...payload,
+            //     id: String(newRefreshToken.id),
+            // });
+            // res.cookie('accessToken', accessToken, {
+            //     domain: 'localhost',
+            //     sameSite: 'strict',
+            //     maxAge: 60 * 60 * 1000, //1 day
+            //     httpOnly: true,
+            //     // secure: true,
+            // });
+            // res.cookie('refreshToken', refreshToken, {
+            //     domain: 'localhost',
+            //     sameSite: 'strict',
+            //     maxAge: 60 * 60 * 1000 * 24 * 365, //1 year
+            //     httpOnly: true,
+            //     // secure: true,
+            // });
+            await this.setCookies(res, user);
             res.status(200).json({ id: user.id });
         } catch (err) {
             return next(err);
@@ -187,17 +222,17 @@ export class AuthController {
 
             res.cookie('accessToken', accessToken, {
                 domain: 'localhost',
-                sameSite: 'none',
-                maxAge: 1000 * 60 * 60, // 1h
-                httpOnly: true, // Very important
+                sameSite: 'strict',
+                maxAge: 1000 * 60 * 60,
+                httpOnly: true,
                 secure: true,
             });
 
             res.cookie('refreshToken', refreshToken, {
                 domain: 'localhost',
-                sameSite: 'none',
-                maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
-                httpOnly: true, // Very important
+                sameSite: 'strict',
+                maxAge: 1000 * 60 * 60 * 24 * 365,
+                httpOnly: true,
                 secure: true,
             });
 
@@ -215,11 +250,11 @@ export class AuthController {
             this.logger.info('User has been logged out', { id: req.auth.sub });
 
             res.clearCookie('accessToken', {
-                sameSite: 'none',
+                sameSite: 'strict',
                 secure: true,
             });
             res.clearCookie('refreshToken', {
-                sameSite: 'none',
+                sameSite: 'strict',
                 secure: true,
             });
             res.json({});
