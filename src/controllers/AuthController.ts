@@ -214,8 +214,14 @@ export class AuthController {
             this.logger.info('Refresh token has been deleted', req.auth.id);
             this.logger.info('User has been logged out', { id: req.auth.sub });
 
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken');
+            res.clearCookie('accessToken', {
+                sameSite: 'none',
+                secure: true,
+            });
+            res.clearCookie('refreshToken', {
+                sameSite: 'none',
+                secure: true,
+            });
             res.json({});
         } catch (err) {
             return next(err);
